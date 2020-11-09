@@ -15,7 +15,7 @@ const Breed = require('./components/breeds/model')
 const petTypePath = require('./components/petTypes/routes')
 const PetType = require('./components/petTypes/model')
 
-mongoose.connect('mongodb://127.0.0.1:27017/mascotadevuelta', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://127.0.0.1:27017/mascotaDeVuelta', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
