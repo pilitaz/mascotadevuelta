@@ -18,8 +18,7 @@ enrutador.get('/', (solicitud, respuesta) => {
  * devuelve la información de un solo usuario
  */
 enrutador.get('/:email', (solicitud, respuesta) => {
-  console.log("solicitud", solicitud.params.email)
-  User.find({ email: solicitud.params.email },(err, user) => {
+  User.find({ email: solicitud.params.email }, (err, user) => {
     if (err) {
       respuesta.status(500).send('No pude cargar el usuario')
     } else {
@@ -32,22 +31,30 @@ enrutador.get('/:email', (solicitud, respuesta) => {
  * Crea un usuario o multiples usuarios
  */
 enrutador.post('/', (solicitud, respuesta) => {
+  const newUser = new User(solicitud.body);
 
-  console.log("solicitud.body", solicitud.body)
-  respuesta.send({})
+  newUser.save((error, estado) => {
+    console.log("error", error);
+    console.log("estado", estado)
+    respuesta.send(estado)
+  })
 })
 
 /**
  * actualiza un usuario o multiples usuarios
  */
-enrutador.put('/', (solicitud, respuesta) => {
-  console.log("solicitud.body", solicitud.body)
-  respuesta.send({})
+enrutador.put('/', (solicitud, respuesta) => {  
+  User.updateOne({email: solicitud.body.email}, solicitud.body, (err, user) => {
+    if (err) {
+      respuesta.status(500).send('No pude cargar el usuario')
+    } else {
+      respuesta.send(user)
+    }
+  })
 })
 
 enrutador.delete('/:email', (solicitud, respuesta) => {
-  console.log("eliminando", solicitud.params.email )
-  User.findOneAndDelete({ email: solicitud.params.email },(err, user) => {
+  User.findOneAndDelete({ email: solicitud.params.email }, (err, user) => {
     if (err) {
       respuesta.status(500).send('No pude eliminar el usuario')
     } else {
