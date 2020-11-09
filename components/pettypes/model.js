@@ -4,6 +4,6 @@ const petTypeSchema = new mongoose.Schema({
   name: String
 })
 
-const PetType = mongoose.model('pettypes', petTypeSchema)
+const PetType = mongoose.model('petTypes', petTypeSchema)
 
 module.exports = PetType
