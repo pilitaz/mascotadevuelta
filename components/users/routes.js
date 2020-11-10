@@ -31,20 +31,26 @@ enrutador.get('/:email', (solicitud, respuesta) => {
  * Crea un usuario o multiples usuarios
  */
 enrutador.post('/', (solicitud, respuesta) => {
-  const newUser = new User(solicitud.body);
+  
+  if (solicitud.body.email !== undefined) {
+      const newUser = new User(solicitud.body);
+      newUser.save((error, estado) => {
+      console.log("error", error);
+      console.log("estado", estado)
+      respuesta.send(estado)
+    })
+  } else {
+    respuesta.send('No hay datos suficientes para crear un usuario.')
+  }
+  
 
-  newUser.save((error, estado) => {
-    console.log("error", error);
-    console.log("estado", estado)
-    respuesta.send(estado)
-  })
 })
 
 /**
  * actualiza un usuario o multiples usuarios
  */
 enrutador.put('/', (solicitud, respuesta) => {  
-  User.updateOne({email: solicitud.body.email}, solicitud.body, (err, user) => {
+  User.updateOne({_id: solicitud.body._id}, solicitud.body, (err, user) => {
     if (err) {
       respuesta.status(500).send('No pude cargar el usuario')
     } else {
@@ -54,7 +60,7 @@ enrutador.put('/', (solicitud, respuesta) => {
 })
 
 enrutador.delete('/:email', (solicitud, respuesta) => {
-  User.findOneAndDelete({ email: solicitud.params.email }, (err, user) => {
+  User.findOneAndDelete({ emil: solicitud.params.emil }, (err, user) => {
     if (err) {
       respuesta.status(500).send('No pude eliminar el usuario')
     } else {

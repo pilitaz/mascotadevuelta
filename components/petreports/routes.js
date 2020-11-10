@@ -31,26 +31,28 @@ enrutador.get('/:id', (solicitud, respuesta) => {
  * Crea un reporte de mascota
  */
 enrutador.post('/', (solicitud, respuesta) => {
-  const newPetReport = new PetReport(solicitud.body);
 
+  const newPetReport = new PetReport(solicitud.body);
   newPetReport.save((error, estado) => {
-    console.log("error", error);
-    console.log("estado", estado)
-    respuesta.send(estado)
+    if (error !== null) {
+      respuesta.status(500).send(error)
+    } else {
+      respuesta.send(estado)
+    }
   })
 })
 
 /**
  * actualiza un usuario o multiples usuarios
  */
-// enrutador.put('/', (solicitud, respuesta) => {  
-//   PetReport.updateOne({email: solicitud.body.email}, solicitud.body, (err, petReport) => {
-//     if (err) {
-//       respuesta.status(500).send('No pude cargar el usuario')
-//     } else {
-//       respuesta.send(petReport)
-//     }
-//   })
-// })
+enrutador.put('/', (solicitud, respuesta) => {  
+  PetReport.updateOne({_id: solicitud.body._id}, solicitud.body, (err, petReport) => {
+    if (err) {
+      respuesta.status(500).send('Cambio nuevo.')
+    } else {
+      respuesta.send(petReport)
+    }
+  })
+})
 
 module.exports = enrutador;
