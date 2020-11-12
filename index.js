@@ -1,7 +1,12 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+
+
+// Conection to database:
+require('./dataBase')
+
+// Paths:
 const userPath = require('./components/users/routes')
 const countryPath = require('./components/countries/routes')
 const statePath = require('./components/states/routes')
@@ -10,15 +15,10 @@ const breedPath = require('./components/breeds/routes')
 const petTypePath = require('./components/pettypes/routes')
 const petReportPath = require('./components/petreports/routes')
 
-mongoose.connect('mongodb://127.0.0.1:27017/mascotaDeVuelta', { useNewUrlParser: true, useUnifiedTopology: true })
-
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', function () {
-  console.log('Conexión exitosa con la base de datos')
-})
-
+// Middleware to read json files from the body of collections:
 app.use(bodyParser.json())
+
+// Routes declaration in express:
 app.use('/users', userPath)
 app.use('/countries', countryPath)
 app.use('/states', statePath)

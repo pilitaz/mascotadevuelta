@@ -1,73 +1,76 @@
 const express = require('express')
 const enrutador = express.Router()
-const User = require('./model')
+const { User, PROYECCION } = require('./model')
 
 /**
- * devuelve la lista completa de usuarios
+ * Devuelve la lista completa de usuarios:
  */
-enrutador.get('/', (solicitud, respuesta) => {
+enrutador.get('/', (req, res) => {
   User.find((err, users) => {
     if (err) {
-      respuesta.status(500).send('No pude cargar los usuarios')
+      res.status(500).send('No se pudo cargar los usuarios.')
     } else {
-      respuesta.send(users)
+      res.send(users)
     }
   })
 })
 /**
- * devuelve la información de un solo usuario
+ * Devuelve la información de un solo usuario por email:
  */
-enrutador.get('/:email', (solicitud, respuesta) => {
-  User.find({ email: solicitud.params.email }, (err, user) => {
+enrutador.get('/:email', (req, res) => {
+  User.find({ email: req.params.email }, PROYECCION, (err, user) => {
     if (err) {
-      respuesta.status(500).send('No pude cargar el usuario')
+      res.status(500).send('No pude cargar el usuario.')
     } else {
-      respuesta.send(user)
+      res.send(user)
     }
   })
 })
 
 /**
- * Crea un usuario o multiples usuarios
+ * Crea un usuario o multiples usuarios:
  */
-enrutador.post('/', (solicitud, respuesta) => {
-  
-  if (solicitud.body.email !== undefined) {
-      const newUser = new User(solicitud.body);
-      newUser.save((error, estado) => {
-      console.log("error", error);
-      console.log("estado", estado)
-      respuesta.send(estado)
-    })
-  } else {
-    respuesta.send('No hay datos suficientes para crear un usuario.')
-  }
-  
-
+enrutador.post('/', (req, res) => {
+  console.log('1', req.body)
+  const newUser = new User(req.body[0])
+  console.log('2', newUser)
+    newUser.save((error, registeredUser) => {
+      console.log('3', error)
+      if (error) {
+        res.status(422).send(error)
+      } else {
+        let user = registeredUser.toObject()
+        delete user.password
+        res.status(201).send(user)
+      }
+  })
 })
 
 /**
- * actualiza un usuario o multiples usuarios
+ * Actualiza un usuario o multiples usuarios:
  */
-enrutador.put('/', (solicitud, respuesta) => {  
-  User.updateOne({_id: solicitud.body._id}, solicitud.body, (err, user) => {
+enrutador.put('/', (req, res) => {  
+  User.updateOne({_id: req.body._id}, req.body, (err, updatedUser) => {
     if (err) {
-      respuesta.status(500).send('No pude cargar el usuario')
+      res.status(500).send('No se pudo actualizar la información del usuario.')
     } else {
-      respuesta.send(user)
+      res.send(updatedUser)
     }
   })
 })
 
-enrutador.delete('/:email', (solicitud, respuesta) => {
-  User.findOneAndDelete({ emil: solicitud.params.emil }, (err, user) => {
+/**
+ * Elimina un usuario por email:
+ */
+enrutador.delete('/:email', (req, res) => {
+  User.findOneAndDelete({ email: req.params.email }, (err, erasedUser) => {
     if (err) {
-      respuesta.status(500).send('No pude eliminar el usuario')
+      res.status(500).send('No se pudo eliminar el usuario.')
     } else {
-      respuesta.send("usuario eliminado")
+      res.send("Usuario eliminado.")
     }
   })
 })
 
 
-module.exports = enrutador;
+module.exports = enrutador
