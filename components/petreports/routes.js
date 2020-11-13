@@ -3,54 +3,54 @@ const enrutador = express.Router()
 const PetReport = require('./model')
 
 /**
- * devuelve la lista completa de reportes
+ * Devuelve la lista completa de reportes: No requiere token jwt
  */
-enrutador.get('/', (solicitud, respuesta) => {
+enrutador.get('/', (req, res) => {
   PetReport.find((err, petReports) => {
     if (err) {
-      respuesta.status(500).send('No pude cargar los reportes')
+      res.status(500).send('No pude cargar los reportes')
     } else {
-      respuesta.send(petReports)
+      res.send(petReports)
     }
   })
 })
 /**
- * devuelve la información de un solo usuario
+ * Devuelve la información de un solo usuario: No requiere token jwt
  */
-enrutador.get('/:id', (solicitud, respuesta) => {
-  PetReport.find({ _id: solicitud.params.id }, (err, petReport) => {
+enrutador.get('/:id', (req, res) => {
+  PetReport.find({ _id: req.params.id }, (err, petReport) => {
     if (err) {
-      respuesta.status(500).send('No pude cargar el reporte')
+      res.status(500).send('No pude cargar el reporte')
     } else {
-      respuesta.send(petReport)
+      res.send(petReport)
     }
   })
 })
 
 /**
- * Crea un reporte de mascota
+ * Crea un reporte de mascota: Requiere token jwt
  */
-enrutador.post('/', (solicitud, respuesta) => {
+enrutador.post('/', (req, res) => {
 
-  const newPetReport = new PetReport(solicitud.body);
+  const newPetReport = new PetReport(req.body);
   newPetReport.save((error, estado) => {
     if (error !== null) {
-      respuesta.status(500).send(error)
+      res.status(500).send(error)
     } else {
-      respuesta.send(estado)
+      res.send(estado)
     }
   })
 })
 
 /**
- * actualiza un usuario o multiples usuarios
+ * Actualiza un reporte de mascota: Requiere token jwt
  */
-enrutador.put('/', (solicitud, respuesta) => {  
-  PetReport.updateOne({_id: solicitud.body._id}, solicitud.body, (err, petReport) => {
+enrutador.put('/', (req, res) => {  
+  PetReport.updateOne({_id: req.body._id}, req.body, (err, petReport) => {
     if (err) {
-      respuesta.status(500).send('Cambio nuevo.')
+      res.status(500).send('Cambio nuevo.')
     } else {
-      respuesta.send(petReport)
+      res.send(petReport)
     }
   })
 })
