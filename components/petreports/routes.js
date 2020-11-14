@@ -30,9 +30,15 @@ enrutador.get('/:id', (req, res) => {
 /**
  * Crea un reporte de mascota: Requiere token jwt
  */
-enrutador.post('/', (req, res) => {
 
-  const newPetReport = new PetReport(req.body);
+const multer = require('multer')
+const pictureUploader = multer({ dest: 'pet_pics/' })
+
+enrutador.post('/', pictureUploader.single('pet_pic'), (req, res) => {
+  const newPetReport = new PetReport(req.body)
+  if (req.file) {
+    newPetReport.pet_pic = `${req.protocol}://${req.get('host')}/${req.file.destination}${req.file.filename}`
+  }
   newPetReport.save((error, estado) => {
     if (error !== null) {
       res.status(500).send(error)

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const petReportSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   reportType: String,
   petType: String,
   name: String,
@@ -11,7 +10,7 @@ const petReportSchema = new mongoose.Schema({
   size: String,
   chip: Boolean,
   chipNumber: String,
-  photos: [],
+  pet_pic: String,
   additionalFeatures: [],
   eventDate: Date,
   eventDescription: String,

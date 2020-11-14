@@ -27,6 +27,9 @@ app.use('/breeds', breedPath)
 app.use('/pettypes', petTypePath)
 app.use('/petreports', petReportPath)
 
+// Configuring a path and a folder for static files:
+app.use('/pet_pics', express.static('pet_pic'))
+
 app.listen(3000, () => {
   console.log('Aplicación corriendo en http://localhost:3000')
 })

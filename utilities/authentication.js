@@ -2,26 +2,25 @@ const jwt = require('jwt-simple')
 const moment = require('moment')
 const SECRET = 'mascotadevuelta'
 
-const crearToken = (user) => {
+const createToken = (user) => {
   const payload = {
-    id: user._id,
-    nombre: user.nombre,
-    fechaDeExpiracion: moment().add(1, 'hour').unix()
+    name: user.name,
+    email: user.email,
+    expirationDate: moment().add(2, 'hour').unix()
   }
   return jwt.encode(payload, SECRET)
 }
 
-// Authorization y bearer (preguntas)
-const obtenerToken = (authorization) => {
+const getToken = (authorization) => {
   return authorization.split(' ')[1] //[bearer, token]
 }
 
-const validarAutorizacion = (authorization) => { // Función que regresa o true o false
-  const token = obtenerToken(authorization) // Devuelve el token
+const validateAuthorization = (authorization) => { // Función que regresa o true o false
+  const token = getToken(authorization) // Devuelve el token
   if (token) {
     try {
       const payload = jwt.decode(token, SECRET) // Se decodifica el payload para poder acceder a sus atributos (la información del usuario)
-      if (payload.fechaDeExpiracion < moment().unix()) {
+      if (payload.expirationDate < moment().unix()) {
         console.error('Este token ha expirado')
         return false
       }
@@ -34,7 +33,7 @@ const validarAutorizacion = (authorization) => { // Función que regresa o true 
 }
 
 const currentUser = (authorization) => {
-  const token = obtenerToken(authorization)
+  const token = getToken(authorization)
   if (token) {
     try {
       return jwt.decode(token, SECRET) //Retorna el payload (información) del usuario.
@@ -48,11 +47,11 @@ const currentUser = (authorization) => {
 const middleAuthorization = (req, res, next) => {
   const authorization = req.headers.authorization
 
-  if (authorization && validarAutorizacion(authorization)) {
+  if (authorization && validateAuthorization(authorization)) {
     next()
   } else {
     res.status(401).send({ mensaje: 'Debe autenticarse para poder realizar la acción' })
   }
 }
 
-module.exports = { currentUser, crearToken, middleAuthorization, validarAutorizacion }
+module.exports = { currentUser, createToken, middleAuthorization, validateAuthorization }
