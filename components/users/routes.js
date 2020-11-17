@@ -6,7 +6,7 @@ const { createToken, middleAuthorization } = require('../../utilities/authentica
 /**
  * Devuelve la lista completa de usuarios: Requiere token jwt (sólo administradores)
  */
-router.get('/', (req, res) => {
+router.get('/', middleAuthorization, (req, res) => {
   User.find((err, users) => {
     if (err) {
       res.status(500).send('No se pudo cargar los usuarios.')
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 /**
  * Devuelve la información de un solo usuario por email: Requiere token jwt
  */
-router.get('/:email', (req, res) => {
+router.get('/:email', middleAuthorization, (req, res) => {
   User.find({ email: req.params.email }, PROYECCION, (err, user) => {
     if (err) {
       res.status(500).send('No pude cargar el usuario.')
@@ -35,14 +35,14 @@ router.get('/:email', (req, res) => {
  */
 router.post('/', (req, res) => {
   const newUser = new User(req.body)
-    newUser.save((err, registeredUser) => {
-      if (err) {
-        res.status(422).send(err)
-      } else {
-        let user = registeredUser.toObject()
-        delete user.password
-        res.status(201).send(user)
-      }
+  newUser.save((err, registeredUser) => {
+    if (err) {
+      res.status(422).send(err)
+    } else {
+      let user = registeredUser.toObject()
+      delete user.password
+      res.status(201).send(user)
+    }
   })
 })
 
@@ -64,8 +64,8 @@ router.post('/authentication', (req, res) => {
 /**
  * Actualiza un usuario: Requiere token jwt
  */
-router.put('/', middleAuthorization, (req, res) => {  
-  User.updateOne({_id: req.body._id}, req.body, (err, updatedUser) => {
+router.put('/', middleAuthorization, (req, res) => {
+  User.updateOne({ _id: req.body._id }, req.body, (err, updatedUser) => {
     if (err) {
       res.status(500).send('No se pudo actualizar la información del usuario.')
     } else {
