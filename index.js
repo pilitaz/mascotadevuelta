@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const { PORT } = require('./config')
 
 
 // Conection to database:
@@ -30,6 +31,6 @@ app.use('/petreports', petReportPath)
 // Configuring a path and a folder for static files:
 app.use('/pet_pics', express.static('pet_pic'))
 
-app.listen(3000, () => {
-  console.log('Aplicación corriendo en http://localhost:3000')
+app.listen(PORT, () => {
+  console.log('Aplicación corriendo en http://localhost:', PORT)
 })

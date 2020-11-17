@@ -1,6 +1,6 @@
 use mascotaDeVuelta
 
-db.pettype.insertMany([{"name" : "Gato" },{"name" : "Perro" }])
+db.pettypes.insertMany([{"name" : "Gato" },{"name" : "Perro" }])
 
 db.breeds.insertMany([{"name" : "Labrador", "petType" : "Perro" },{"name" : "Pastor Aleman", "petType" : "Perro" },{"name" : "Persa", "petType" : "Gato" },{"name" : "Siames", "petType" : "Gato" }])
 
