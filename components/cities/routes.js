@@ -15,4 +15,14 @@ enrutador.get('/', (solicitud, respuesta) => {
   })
 })
 
+enrutador.get('/:state', (req, res) => {
+  City.find({ state: req.params.state }, (err, cities) => {
+    if (err) {
+      res.status(500).send('No pude cargar las ciudades')
+    } else {
+      res.send(cities)
+    }
+  })
+})
+
 module.exports = enrutador;

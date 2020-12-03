@@ -15,4 +15,14 @@ enrutador.get('/', (solicitud, respuesta) => {
   })
 })
 
+enrutador.get('/:country', (req, res) => {
+  State.find({ country: req.params.country }, (err, states) => {
+    if (err) {
+      res.status(500).send('No pude cargar las razas')
+    } else {
+      res.send(states)
+    }
+  })
+})
+
 module.exports = enrutador;
