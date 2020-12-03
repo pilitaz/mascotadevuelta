@@ -15,4 +15,14 @@ enrutador.get('/', (solicitud, respuesta) => {
   })
 })
 
+enrutador.get('/:petType', (req, res) => {
+  Breed.find({ petType: req.params.petType }, (err, breeds) => {
+    if (err) {
+      res.status(500).send('No pude cargar las razas')
+    } else {
+      res.send(breeds)
+    }
+  })
+})
+
 module.exports = enrutador;
