@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const { PORT } = require('./config')
+const cors = require('cors')
 
 
 // Conection to database:
@@ -15,6 +16,8 @@ const cityPath = require('./components/cities/routes')
 const breedPath = require('./components/breeds/routes')
 const petTypePath = require('./components/pettypes/routes')
 const petReportPath = require('./components/petreports/routes')
+
+app.use(cors())
 
 // Middleware to read json files from the body of collections:
 app.use(bodyParser.json())
@@ -32,5 +35,5 @@ app.use('/petreports', petReportPath)
 app.use('/pet_pics', express.static('pet_pic'))
 
 app.listen(PORT, () => {
-  console.log('Aplicación corriendo en http://localhost:', PORT)
+  console.log(`Aplicación corriendo en http://localhost:${PORT}`)
 })
