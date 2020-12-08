@@ -34,7 +34,12 @@ router.get('/:email', middleAuthorization, (req, res) => {
  * Crea un usuario: No requiere token jwt
  */
 router.post('/', (req, res) => {
-  const newUser = new User(req.body)
+  const newUser = new User({
+    name: req.body.signupName,
+    email: req.body.signupEmail,
+    password: req.body.signupPassword,
+    phone: req.body.signupPhone
+  })
   newUser.save((err, registeredUser) => {
     if (err) {
       res.status(422).send(err)
