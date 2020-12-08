@@ -48,15 +48,15 @@ router.post('/', (req, res) => {
 
 router.post('/authentication', (req, res) => {
   User.findOne({
-    email: req.body.email,
-    password: req.body.password
+    email: req.body.loginEmail, //formControlName
+    password: req.body.loginPassword //formControlName
   }, (err, user) => {
     if (err) {
       res.status(500).send(err)
     } else if (user) { // Si el user es encontrado, deberíamos devolver la llave
       res.send({ jwt: createToken(user) })
     } else { // Cuando el user esta vacio, es decir, cuando no se encontró
-      res.status(401).send({ err: 'El correo o contraseña no son validos' })
+      res.status(401).send({ jwt: '', err: 'El correo o contraseña no son validos' })
     }
   })
 })
