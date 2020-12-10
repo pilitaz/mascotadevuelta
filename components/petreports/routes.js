@@ -1,6 +1,7 @@
 const express = require('express')
 const enrutador = express.Router()
 const PetReport = require('./model')
+const { createToken, middleAuthorization } = require('../../utilities/authentication')
 
 /**
  * Devuelve la lista completa de reportes: No requiere token jwt
@@ -34,7 +35,7 @@ enrutador.get('/:id', (req, res) => {
 const multer = require('multer')
 const pictureUploader = multer({ dest: 'pet_pics/' })
 
-enrutador.post('/', pictureUploader.single('pet_pic'), (req, res) => {
+enrutador.post('/', middleAuthorization, pictureUploader.single('pet_pic'), (req, res) => {
   const newPetReport = new PetReport(req.body)
   if (req.file) {
     newPetReport.pet_pic = `${req.protocol}://${req.get('host')}/${req.file.destination}${req.file.filename}`
