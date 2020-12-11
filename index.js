@@ -32,7 +32,7 @@ app.use('/pettypes', petTypePath)
 app.use('/petreports', petReportPath)
 
 // Configuring a path and a folder for static files:
-app.use('/pet_pics', express.static('pet_pic'))
+app.use('/petPics', express.static('petPics'));
 
 app.listen(PORT, () => {
   console.log(`Aplicación corriendo en http://localhost:${PORT}`)
