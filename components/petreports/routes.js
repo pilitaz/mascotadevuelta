@@ -15,6 +15,28 @@ enrutador.get('/', (req, res) => {
     }
   })
 })
+
+/**
+ * Devuelve la lista completa de reportes que cumplan  las condiciones de busqueda: No requiere token jwt
+ * req.body ejemplo pueden venir  más o menos criterios de busqueda con el mismo nombre que tiene en el schema
+ * {
+ *  
+ *   "petType": "Perro",
+ *   "gender": "Macho",
+ *   "city": "Bogotá"
+ *   
+ *}
+ */
+enrutador.get('/searchReports', (req, res) => {
+  PetReport.find(req.body, (err, petReports) => {
+    if (err) {
+      res.status(500).send('No encontre resultados con los criterios de busqueda')
+    } else {
+      res.send(petReports)
+    }
+  })
+})
+
 /**
  * Devuelve la información de un solo usuario: No requiere token jwt
  */
@@ -52,8 +74,8 @@ enrutador.post('/', middleAuthorization, pictureUploader.single('pet_pic'), (req
 /**
  * Actualiza un reporte de mascota: Requiere token jwt
  */
-enrutador.put('/', (req, res) => {  
-  PetReport.updateOne({_id: req.body._id}, req.body, (err, petReport) => {
+enrutador.put('/', (req, res) => {
+  PetReport.updateOne({ _id: req.body._id }, req.body, (err, petReport) => {
     if (err) {
       res.status(500).send('Cambio nuevo.')
     } else {
