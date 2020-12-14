@@ -27,8 +27,9 @@ enrutador.get('/', (req, res) => {
  *   
  *}
  */
-enrutador.get('/searchReports', (req, res) => {
+enrutador.post('/searchReports', (req, res) => {
   PetReport.find(req.body, (err, petReports) => {
+    console.log("req.body", req.body)
     if (err) {
       res.status(500).send('No encontre resultados con los criterios de busqueda')
     } else {
