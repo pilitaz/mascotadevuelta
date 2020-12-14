@@ -6,6 +6,7 @@ const createToken = (user) => {
   const payload = {
     name: user.name,
     email: user.email,
+    phone: user.phone,
     expirationDate: moment().add(2, 'hour').unix()
   }
   return jwt.encode(payload, SECRET)
